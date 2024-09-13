@@ -43,6 +43,8 @@ export default function App() {
     // ✨ This is the change handler for your text inputs and your textarea.
     // You can check `evt.target.id` to know which input changed
     // and then you can use `evt.target.value` to update the state of the form
+    const { id, value } = evt.target
+    setValues(prevValues => ({...prevValues, [id]: value }))
   }
   const edit = id => {
     // ✨ Put this function inside a click handler for the <button>Edit</button>.
@@ -52,6 +54,9 @@ export default function App() {
   const submitNewMember = () => {
     // This takes the values of the form and constructs a new member object,
     // which is then concatenated at the end of the `members` state
+    const { fname, lname, bio } = values
+    const newMember = { fname, lname, bio, id: getId() }
+    setMembers([ members.concat, newMember ]) 
   }
   const editExistingMember = () => {
     // ✨ This takes the values of the form and replaces the data of the
@@ -63,6 +68,8 @@ export default function App() {
     // depending on whether the `editing` state is null or has an id in it.
     // Don't allow the page to reload! Prevent the default behavior
     // and clean up the form after submitting
+    evt.preventDefault()
+    submitNewMember
   }
   return (
     <div>{/* ✨ Fix the JSX by wiring the necessary values and event handlers */}
@@ -84,7 +91,7 @@ export default function App() {
       </div>
       <div id="membersForm">
         <h2>{editing ? 'Edit' : 'Add'} a Team Member</h2>
-        <form>
+        <form onSubmit={onSubmit}>
           <div>
             <label htmlFor="fname">First Name </label>
             <input onChange={onChange} value={values.fname} id="fname" type="text" placeholder="Type First Name" />
